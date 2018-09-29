@@ -132,20 +132,52 @@ Work out the exercises on a new branch of your git repo. Once you are confident 
 Respond to the following questions and push the responses to your GitHub:
  
  - Create a character vector `family` with your family members' name
+```{r}
+family <- c('Buford', 'Earlene', 'Linda', 'Chad', 'Marcia', 'Roger', 'Kenny', 'Brian', 'Laura', 'Cami', 'Mike')
+```
+ 
  - Create a vector `birth` with their birth year 
+```{r}
+birth <- c(1930L, 1929L, 1955L, 1959L, 1961L, 1963L, 1964L, 1971L, 1971L, 1995L, 1995L)
+```
+ 
  - Create another vector `age` with your family members' ages (calculated using `birth`)
+```{r}
+age <- 2018L - birth
+```
+ 
  - Use `typeof()` to make sure that `family`, `birth`, and `age` are the appropriate type (character, integer/double, integer/double)
+```{r}
+typeof(family)
+typeof(birth)
+typeof(age)
+```
+ 
  - Use `names()` to name the elements of `age` with the family members' names from `family`
+```{r}
+names(age) <- family
+```
+
+ 
  - Use inline code `r ##` to print your name and age (using indexing)
+My name and age: `r family[8]` `r age['Brian']`
 
  - What happens when:
    + You extract using a positive index bigger than the vector length?
+
+   **Extracting a positive index larger than the vector returns a result of NA**
+
    + You subset by a name that doesn't exist?
+   
+   **A name that doesn't exist will also return a result of NA**
+
    + You assign a number to position 20 of the age vector? 
+
+   **Assigning a number to position 20 of the age vector (which before had only 11) created positions from 12 to 20, filling in an NA value for every new value below position 20, and setting postion 20 to be the assigned number.**
    
  - Read carefully the documentation for `is.vector()`. If `is.vector(x)` retrieves `TRUE`, does it mean that `x` is an atomic vector?
 
-
+  **No, acccording to the help text, is.vector will also produce a TRUE response for a list.**
 
 
 
