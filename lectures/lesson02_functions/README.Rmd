@@ -237,10 +237,36 @@ Turn the followings into functions, making sure that your function retrieves an 
 
 
 - `mean(x, na.rm = T)`
+```{r}
+mean_safe <- function(x) {
+  if (!is.double(x)) stop('x must be some kind of numeric vector', call. = F)
+  
+  mean(x, na.rm = T)
+}
+mean_safe(c(34L, NA, 2L))
+```
+
 
 - `x / sum(x, na.rm = TRUE)`
+```{r}
+percentages <- function(x) {
+  if (!is.double(x)) stop('x must be some kind of numeric vector', call. = F)
+
+    x / sum(x, na.rm = TRUE)
+}
+percentages(c(10L, NA, 2L))
+```
+
 
 - `sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE)`
+```{r}
+zowie <- function(x) {
+  if (!is.double(x)) stop('x must be some kind of numeric vector', call. = F)
+
+    sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE)
+}
+zowie(c(10, 11, 12))
+```
 
 
 For the pros: Use `BRRR::skrrrahh(34)` to listen DJ Khaled yelling "They don't wanna see us win!" when `x` is not numeric. The package is available on GitHub only:
@@ -255,6 +281,20 @@ devtools::install_github("brooke-watson/BRRR")
 
 Write a function `yearlySalary` to convert any values <8000 to NA. You can use indexing or a function such as `ifelse()`. Then, output each value as a dollar amount using `scales::dollar()` or `paste()`.
 For example, the `c(100, 0, NA, 2000, 8000)` should be returned as `c("$NA", "$NA", "$NA", "$NA", "$8000")`.
+
+```{r}
+yearlySalary <- function(x) {
+  if (!is.double(x)) stop('x must be some kind of numeric vector', call. = F)
+  
+  working <- ifelse(x >= 8000, x, "NA")
+  working <- paste("$", working, sep = '')
+  working
+}
+
+yearlySalary(c(100, 0, NA, 2000, 8000))
+
+```
+
 
 
 
