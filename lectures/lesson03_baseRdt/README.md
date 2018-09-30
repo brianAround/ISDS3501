@@ -6,10 +6,10 @@ if (!require(tidyverse)) {install.packages('tidyverse')}
 library(tidyverse)
 ```
 
-Data frame
-==========
+# Data frame
 
-To create a data frame, use the function `data.frame`:
+To create a data frame, use the function
+`data.frame`:
 
 ``` r
 #data from https://www.statista.com/statistics/804398/us-iphone-sales-by-model/
@@ -31,7 +31,8 @@ iphoneSales <- data.frame(
 #note how "time" becomes a factor-- more details at http://r4ds.had.co.nz/factors.html#creating-factors
 ```
 
-Dataframes are a special case of a list, where each element is a vector of the same length but possibly different type. For instance:
+Dataframes are a special case of a list, where each element is a vector
+of the same length but possibly different type. For instance:
 
 ``` r
 str(iphoneSales)
@@ -56,7 +57,8 @@ typeof(iphoneSales)
 ## [1] "list"
 ```
 
-Indexing works similarly to vectors, but note the difference between *extracting* and *selecting*:
+Indexing works similarly to vectors, but note the difference between
+*extracting* and *selecting*:
 
 ``` r
 #selecting
@@ -94,19 +96,50 @@ iphoneSales$iPhone4S
 # use dataframe[row,col] to
 
 #extract the first two elements of column "IPhone6s"
-
+iphoneSales[c(1:2), 'iPhone6S']
+## [1] NA 16
 #subset iphoneSales to a dataframe with only time, iPhone5C, IPhoneX
-
+iphoneSales[, c('time',  'iPhone5C', 'iPhoneX')]
+##       time iPhone5C iPhoneX
+## 1 Sep 2014     15.5      NA
+## 2 Sep 2015      5.0      NA
+## 3 Sep 2016       NA      NA
+## 4 Dec 2016       NA      NA
+## 5 Sep 2017       NA      NA
+## 6 Dec 2017       NA    20.1
+## 7 Jun 2018       NA    17.0
 #keep only the rows where the sales for iPhoneSE are higher than 7 AND are not NA (AND = &, OR = |, NOT = !)
-
+iphoneSales[iphoneSales$iPhoneSE > 7 & !is.na(iphoneSales$iPhoneSE),]
+##       time iPhone4S iPhone5C iPhone5S iPhoneSE iPhone6 iPhone6Plus
+## 3 Sep 2016       NA       NA       NA      9.5       5           7
+## 5 Sep 2017       NA       NA       NA     11.0      NA          NA
+## 7 Jun 2018       NA       NA       NA      8.0      NA          NA
+##   iPhone6S iPhone6SPlus iPhone7 iPhone7Plus iPhone8 iPhone8Plus iPhoneX
+## 3       19         12.5    31.0        16.0      NA          NA      NA
+## 5       10          4.5    28.5        29.5       6        10.5      NA
+## 7        8          3.0    16.0        11.0      13        24.0      17
 #Use %in% to keep only the rows for c("Sep 2014", "Sep 2015", "Sep 2018")
-
+iphoneSales[iphoneSales$time %in% c("Sep 2014", "Sep 2015", "Sep 2018"),]
+##       time iPhone4S iPhone5C iPhone5S iPhoneSE iPhone6 iPhone6Plus
+## 1 Sep 2014        9     15.5       30       NA      33        12.5
+## 2 Sep 2015       NA      5.0       19       NA      33        19.0
+##   iPhone6S iPhone6SPlus iPhone7 iPhone7Plus iPhone8 iPhone8Plus iPhoneX
+## 1       NA           NA      NA          NA      NA          NA      NA
+## 2       16            8      NA          NA      NA          NA      NA
 #calculate the mean() of the IPhone7 sold 
-
+mean(iphoneSales$iPhone7, na.rm = T)
+## [1] 25.7
 #use inline code to print the mean of the iphone sold in Jun 2018
+
+jun18 <- iphoneSales[iphoneSales$time == 'Jun 2018',]
+jun18 <- jun18[,c(2:14)]
 ```
 
-However, the `tidyverse` is best suited for using rectangular data structures called `tibbles` instead of data frames. To convert a `data.frame` into a `tibble`:
+**The mean amount of iPhone Sales in Jun 2018 is 12.5**
+
+However, the `tidyverse` is best suited for using rectangular data
+structures called `tibbles` instead of data frames. To convert a
+`data.frame` into a `tibble`:
 
 ``` r
 as_tibble(iphoneSales)
@@ -128,7 +161,10 @@ typeof(as_tibble(iphoneSales))
 ## [1] "list"
 ```
 
-Because tibbles are also dataframes, you can use indexing as you would do on a `data.frame`. However, a crucial difference between tibbles and dataframe is that tibbles allow to have column-list elements while dataframes allow only column-vectors:
+Because tibbles are also dataframes, you can use indexing as you would
+do on a `data.frame`. However, a crucial difference between tibbles and
+dataframe is that tibbles allow to have column-list elements while
+dataframes allow only column-vectors:
 
 ``` r
 iphoneSales_tibble <- tibble(year = c(2017, 2018), 
@@ -158,17 +194,22 @@ iphoneSales_df
 # from iphoneSales_tibble extract the *vector* with the amounts of iphone7/7plus sold in 2017
 ```
 
-The pipe operator
------------------
+\#\#The pipe operator
 
-Before moving into tidyverse, we need to familiarize with the `%>%` (pipe), an operator that enables to chain functions rather than nesting them. That makes the code easier to process for humans rather than nesting multiple functions. For instance:
+Before moving into tidyverse, we need to familiarize with the `%>%`
+(pipe), an operator that enables to chain functions rather than nesting
+them. That makes the code easier to process for humans rather than
+nesting multiple functions. For instance:
 
 ``` r
 round(mean(c(1:10, NA), na.rm = T), 0)
 ## [1] 6
 ```
 
-You can "pipe" the above functions using `%>%` (shortcut: shift+cmd/ctrl+I), which passes the output that preceeds `%>%` to the first argument of the subsequent function (or alternatively anywhere you place a `.`). For instance:
+You can “pipe” the above functions using `%>%` (shortcut:
+shift+cmd/ctrl+I), which passes the output that preceeds `%>%` to the
+first argument of the subsequent function (or alternatively anywhere you
+place a `.`). For instance:
 
 ``` r
 c(1:10, NA) %>% 
